@@ -1,0 +1,37 @@
+firstBoot:
+inc R0 				; Wir erhöhen R0 um 1
+storeB R0 0x0F00		; Wir speichern R0 in die angegebene Adresse
+set IR0 0			; Wir setzen IndexRegister 0 zu 0 Sicherheitshalber
+set IR1 40000			; Wir setzen IndexRegister zu 40k was die zahl ist wie häufig wir loopen wollen
+call loop			; Wir springen zur Loop in der main file
+set IR0 0			; Wir reseten IndexRegister 0 wieder
+call loop			; Wir rufen nochmal Loop auf
+set IR0 0			; Wir reseten IndexRegister 0 wieder
+call loop			; Wir rufen nochmal Loop auf
+storeB R0 0x0F03		; Wir speichern R0 was 3 sein sollte in die angegebene adresse
+writeBlock 0x0001 0x0F00	; Wir schreiben den Speicherblock zurück in die SSD
+
+set R0 125			; Pixel X Koordinate
+set R1 75			; Pixel Y Koordinate
+set R2 255			; Pixel Rot Farbeanteil
+set R3 0			; Pixel Grün Farbanteil
+set R4 0			; Pixel Blau Farbanteil
+set R5 255			; Pixel Transparenz Farbanteil
+set IR0 250			; Max X Koordinate
+set IR1 230			; Max Y Koordinate
+store R0 0x1FFF
+call renderFrame		; Wir springen zu einer Funktion in der Renderer File
+
+set R0 300			; Pixel X Koordinate
+set R1 75			; Pixel Y Koordinate
+set R2 0			; Pixel Rot Farbeanteil
+set R3 255			; Pixel Grün Farbanteil
+set R4 0			; Pixel Blau Farbanteil
+set R5 255			; Pixel Transparenz Farbanteil
+set IR0 400			; Max X Koordinate
+set IR1 150			; Max Y Koordinate
+store R0 0x1FFF
+call renderFrame		; Wir springen zu einer Funktion in der Renderer File
+startFrame			; Wir sagen der GPU das der Frame Gerendert werden soll
+
+ret				; Wir returnen zur Main File wieder

@@ -1,0 +1,58 @@
+import:
+	firstStart.txt
+	secondStart.txt
+	renderer.txt
+	expand1.txt;
+interrupts[
+	0x02: underflow
+	0x0C: mouseClickDown
+	0x13: forceExit]
+main:
+loadBlock 0x0001 0x0F00 ; Unser block mit Metadaten
+loadB R0 0x0F00 	; Wir holen uns ein Bit und laden in in Register 0
+cmp R0 0 		; Wir vergleichen Register 0 mit der Zahl 0
+hop 16 2 		; Wir schauen ob die IsEqual Flag gesetzt wurde wenn ja überspring die 2 folgenden befehle
+call secondBoot		; Wir springen (call) zum secondBoot Label
+jmp stop		; Sobald wir wieder hier sind springen wir zu Stop
+call firstBoot		; Wir springen (call) zum firstBoot Label
+jmp stop		; Sobald wir wieder hier sind springen wir zu Stop
+
+loop:
+inc IR0 		; Wir erhöhen IndexRegister 0 um 1
+cmp IR0 IR1		; Wir vergleichen IndexRegister mit IndexRegister 1
+jne loop		; Wenn die flag isNotEqual true ist dann springen wir wieder back zu loop
+inc R0			; Wir erhöhen einfach aus Testzwecken R0 jedes mal wenn die Loop zu ende ist
+ret			; Wir returnen zu dem Punkt wo wir call aufgerufen haben
+
+forceExit:
+exit
+
+underflow:
+getSReg R0 SR0		; Wir holen uns aus dem SystemRegister 0 den Program Counter als der Interrupt ausgelöst wurde
+push R0			; Wir pushen den Program Counter auf den Stack
+set R0 500		; Wir setzen R0 zu 500 (X Koordinate)
+set R1 400		; Wir setzen R1 zu 400 (Y Koordinate)
+set R2 255		; Wir geben den Farbanteil für Rot an
+set R3 0		; Wir geben den Farbanteil für Grün an
+set R4 0		; Wir geben den Farbanteil für Blau an
+set R5 255		; Wir geben den Farbanteil für Alpha an
+set IR0 550		; Wir setzen die Max X Koordinate zu 550
+set IR1 450		; Wir setzen die Max Y Koordinate zu 450
+store R0 0x1FFF
+call renderFrame	; Wir wollen den Frame in den VRAM laden
+startFrame		; Wir lassen die GPU das Bild zeichnen
+pop R0			; Holen und den Program Counter zurück in R0
+setPC R0		; Wir setzen den Program Counter mit dem Wert in R0
+
+mouseClickDown:
+getInt 3		; Wir holen uns die Taste (erstmal nicht nötig) und dann die Position
+set R3 255
+set R4 255
+set R5 255
+setPx R1 R2 R0 R3 R4 R5		; Wir geben alle Informationen die in den Registern sind weiter für den Pixel in den VRAM
+getSReg R0 SR0
+startFrame
+setPC R0
+
+stop:
+halt

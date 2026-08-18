@@ -1,0 +1,21 @@
+renderFrame:
+setPx R0 R1 R2 R3 R4 R5		; Wir geben alle Informationen die in den Registern sind weiter für den Pixel in den VRAM
+inc R0				; Wir incrementen die X Koordinate um 1
+cmp R0 IR0 			; Wir schauen ob X schon bei seinen Maximalen Koordinaten ist
+hop 8 1				; Wenn X größer ist als die Maximale X koordinate dann überspringen wir den ein befehl
+jmp renderFrame			; Wir springen back um ein weiteren Pixel zu setzen
+inc R1				; Wir incrementen R1 um bei der Y Koordinate 1 weiter nach unten zu kommen
+load R0 0x1FFF			; Wir resetten R0 auf sein Ursprungswert wegen neuer Zeile			
+cmp R1 IR1			; Wir schauen ob wir schon greater sind als die Maximale Y Koordinate
+hop 8 1				; Wenn Y greater ist als die Maximale Y koordinate dann überspringen wir den ein befehl
+jmp renderFrame			; Wir springen back um ein weiteren Pixel zu setzen
+ret				; Wir returnen zum Call
+
+renderFrameX:
+setPx R0 R1 R2 R3 R4 R5		; Wir geben alle Informationen die in den Registern sind weiter für den Pixel in den VRAM
+inc R0				; Wir incrementen die X Koordinate um 1
+cmp R0 IR0 			; Wir schauen ob X schon bei seinen Maximalen Koordinaten ist
+hop 8 1				; Wenn X größer ist als die Maximale X koordinate dann überspringen wir den ein befehl
+jmp renderFrameX		; Wir springen back um ein weiteren Pixel zu setzen
+load R0 0x1FFF			; Wir resetten R0 auf sein Ursprungswert
+ret

@@ -1,0 +1,27 @@
+expand1:
+set R0 150
+set R1 100
+set R2 255		; Wir geben den Farbanteil für Rot an
+set R3 0		; Wir geben den Farbanteil für Grün an
+set R4 255		; Wir geben den Farbanteil für Blau an
+set R5 255		; Wir geben den Farbanteil für Alpha an
+set IR0 150		; 1 Pixel X
+set IR1 100		; 1 Pixel Y
+store R0 0x1FFF
+call renderFrameX
+set IR2 0
+call renderDreieck
+startFrame
+ret
+
+renderDreieck:
+dec R0			; Damit Pixel ein nach hinten geht
+store R0 0x1FFF		; Das Zurück Setzen für Später von X
+inc IR0			; Damit es ein Pixel Breiter wird
+inc R1			; Damit es ein Pixel Runter geht
+inc IR2			; Mein Limit
+cmp IR2 20
+hop 8 2
+call renderFrameX
+jmp renderDreieck
+ret
