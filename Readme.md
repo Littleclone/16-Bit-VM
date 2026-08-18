@@ -4,6 +4,8 @@
 
 This is my Costum 16-Bit VM, it has an own Assembler with own CPU Architecture, i am proudest of the Assembler, i probably would do today many things differently but i am still proud of what i did as my second C project (I refined it, originaly it was January 2025 and i refined it July 2025 with i think was last coding End July 2025).
 
+There are old Test Assembly files included, they are all ending with .txt but in development time could be compiled to a binary
+
 # What was its purpose?
 
 Making a Plattform to make more easily an own Operating System in assembly only in 16-Bit. Also it was a learning project, everything except for `GPU.c` was made by myself! 
